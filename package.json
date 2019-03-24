@@ -16,5 +16,9 @@
   "bugs": {
     "url": "https://github.com/mc0918/LIRI/issues"
   },
-  "homepage": "https://github.com/mc0918/LIRI#readme"
+  "homepage": "https://github.com/mc0918/LIRI#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "dotenv": "^7.0.0"
+  }
 }
