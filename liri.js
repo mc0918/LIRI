@@ -19,9 +19,9 @@ console.log(userInput);
 
 //Use user input to search spotify
 spotify
-  .search({ type: "track", query: "All the Small Things" })
+  .search({ type: "track", query: userInput })
   .then(function(response) {
-    console.log(response);
+    console.log(response.tracks.items[0]);
   })
   .catch(function(err) {
     console.log(err);
