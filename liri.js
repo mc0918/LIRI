@@ -1,6 +1,8 @@
 // Requires .env file
 require("dotenv").config();
-var SpotifyAPI = require("spotify-web-api-node");
+var SpotifyAPI = require("node-spotify-api");
+var axios = require("axios");
+var moment = require("moment");
 
 //Require keys file for API keys and save to variable
 var keys = require("./keys");
@@ -14,3 +16,13 @@ console.log(spotify);
 const arg = process.argv;
 var userInput = arg.slice(2);
 console.log(userInput);
+
+//Use user input to search spotify
+spotify
+  .search({ type: "track", query: "All the Small Things" })
+  .then(function(response) {
+    console.log(response);
+  })
+  .catch(function(err) {
+    console.log(err);
+  });
