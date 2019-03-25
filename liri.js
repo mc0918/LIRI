@@ -9,3 +9,8 @@ var keys = require("./keys");
 var spotify = new SpotifyAPI(keys.spotify);
 
 console.log(spotify);
+
+//Take in user input, get rid of index 0 and 1
+const arg = process.argv;
+var userInput = arg.slice(2);
+console.log(userInput);
