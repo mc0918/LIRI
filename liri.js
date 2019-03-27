@@ -43,7 +43,17 @@ inquirer
           concertThis(concertResponse.concert);
         });
     } else if (inquirerResponse.input == "spotify-this-song") {
-      //search spotify
+      console.log("ok!");
+      inquirer
+        .prompt([
+          {
+            message: "search for a song",
+            name: "spotify"
+          }
+        ])
+        .then(function(spotifyResponse) {
+          spotifyThis(spotifyResponse.spotify);
+        });
     } else if (inquirerResponse.input == "movie-this") {
       //search omdb
     } else if (inquirerResponse.input == "do-what-it-says") {
@@ -63,26 +73,27 @@ inquirer
 // }
 
 //Use user input to search spotify
-// spotify
-//   .search({ type: "track", query: userInput })
-//   .then(function(response) {
-//     console.log(response.tracks);
-//     console.log("-----------");
-//     console.log(
-//       "Artist: " +
-//         response.tracks.items[0].artists[0].name +
-//         "\nSong: " +
-//         response.tracks.items[0].name +
-//         "\nPreview: " +
-//         response.tracks.items[0].preview_url +
-//         "\nAlbum: " +
-//         response.tracks.items[0].album.name
-//     );
-//   })
-//   .catch(function(err) {
-//     console.log(err);
-//   });
-
+var spotifyThis = function(userInput) {
+  spotify
+    .search({ type: "track", query: userInput })
+    .then(function(response) {
+      //console.log(response.tracks);
+      console.log("-----------");
+      console.log(
+        "Artist: " +
+          response.tracks.items[0].artists[0].name +
+          "\nSong: " +
+          response.tracks.items[0].name +
+          "\nPreview: " +
+          response.tracks.items[0].preview_url +
+          "\nAlbum: " +
+          response.tracks.items[0].album.name
+      );
+    })
+    .catch(function(err) {
+      console.log(err);
+    });
+};
 var concertThis = function(artist) {
   axios
     .get(
@@ -94,3 +105,10 @@ var concertThis = function(artist) {
       console.log(axiosResponse.data);
     });
 };
+
+var movieThis = function(movieInput){
+    var url = "http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy";
+    axios.get(url).then(movieResponse){
+        console.log("got a movie!")
+    }
+}
