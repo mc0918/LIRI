@@ -38,7 +38,7 @@ inquirer
       name: "input"
     }
   ])
-  .then(function(inquirerResponse) {
+  .then(function(inquirerResponse, err) {
     if (inquirerResponse.input == "concert-this") {
       console.log("ok!");
       inquirer
@@ -142,7 +142,7 @@ var movieThis = function(movieInput) {
     "http://www.omdbapi.com/?t=" + movieInput + "&y=&plot=short&apikey=trilogy";
   axios.get(url).then(function(movieResponse) {
     console.log("got a movie!");
-    console.log(movieResponse.data);
+    //console.log(movieResponse.data);
     console.log(
       "Title: " +
         movieResponse.data.Title +
