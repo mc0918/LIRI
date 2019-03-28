@@ -12,7 +12,9 @@ var keys = require("./keys");
 // Access Spotify keys
 var spotify = new SpotifyAPI(keys.spotify);
 
-console.log(spotify);
+debugger;
+
+//console.log(spotify);
 
 //inquirer prompt instead of using argv user input
 inquirer
@@ -40,7 +42,12 @@ inquirer
           }
         ])
         .then(function(concertResponse) {
-          concertThis(concertResponse.concert);
+          var userInput = concertResponse.concert.split(" ").join("");
+          //console.log(userInput);
+
+          debugger;
+
+          concertThis(userInput);
         });
     } else if (inquirerResponse.input == "spotify-this-song") {
       console.log("ok!");
@@ -55,22 +62,23 @@ inquirer
           spotifyThis(spotifyResponse.spotify);
         });
     } else if (inquirerResponse.input == "movie-this") {
-      //search omdb
+      console.log("movie incoming!");
+      inquirer
+        .prompt([
+          {
+            message: "search for a movie",
+            name: "movie"
+          }
+        ])
+        .then(function(movieResponse) {
+          movieThis(movieResponse.movie);
+        });
     } else if (inquirerResponse.input == "do-what-it-says") {
-      //do the fs thing
+      doWhatItSays();
     } else {
       console.log("how did you manage to get here?");
     }
   });
-
-//Take in user input, get rid of index 0 and 1
-// const arg = process.argv;
-// var userInput = arg.slice(2);
-// console.log(userInput);
-
-// if (process.argv.length === 2) {
-//   userInput = "The Sign";
-// }
 
 //Use user input to search spotify
 var spotifyThis = function(userInput) {
@@ -78,22 +86,26 @@ var spotifyThis = function(userInput) {
     .search({ type: "track", query: userInput })
     .then(function(response) {
       //console.log(response.tracks);
-      console.log("-----------");
-      console.log(
-        "Artist: " +
-          response.tracks.items[0].artists[0].name +
-          "\nSong: " +
-          response.tracks.items[0].name +
-          "\nPreview: " +
-          response.tracks.items[0].preview_url +
-          "\nAlbum: " +
-          response.tracks.items[0].album.name
-      );
+      for (i = 0; i < response.tracks.items.length; i++) {
+        console.log("-----------");
+        console.log(
+          "Artist: " +
+            response.tracks.items[i].artists[0].name +
+            "\nSong: " +
+            response.tracks.items[i].name +
+            "\nPreview: " +
+            response.tracks.items[i].preview_url +
+            "\nAlbum: " +
+            response.tracks.items[i].album.name
+        );
+      }
     })
     .catch(function(err) {
       console.log(err);
     });
 };
+
+//uses bandsintown api to find concert dates
 var concertThis = function(artist) {
   axios
     .get(
@@ -102,13 +114,70 @@ var concertThis = function(artist) {
         "/events?app_id=codingbootcamp"
     )
     .then(function(axiosResponse) {
-      console.log(axiosResponse.data);
+      for (i = 0; i < axiosResponse.data.length; i++) {
+        //console.log(axiosResponse.data[i].datetime);
+        var format = moment(axiosResponse.data[i].datetime).format(
+          "MMMM Do YYYY, h:mm:ss"
+        );
+        console.log(format);
+
+        console.log(axiosResponse.data[i].venue.name);
+        console.log(axiosResponse.data[i].venue.city);
+        console.log("------------------");
+      }
+      //console.log(axiosResponse.data[0].venue.city);
     });
 };
 
-var movieThis = function(movieInput){
-    var url = "http://www.omdbapi.com/?t=remember+the+titans&y=&plot=short&apikey=trilogy";
-    axios.get(url).then(movieResponse){
-        console.log("got a movie!")
+//uses omdb api to find movie
+var movieThis = function(movieInput) {
+  var url =
+    "http://www.omdbapi.com/?t=" + movieInput + "&y=&plot=short&apikey=trilogy";
+  axios.get(url).then(function(movieResponse) {
+    console.log("got a movie!");
+    console.log(movieResponse.data);
+    console.log(
+      "Title: " +
+        movieResponse.data.Title +
+        "\nYear: " +
+        movieResponse.data.Year +
+        "\nIMDB Rating: " +
+        movieResponse.data.imdbRating +
+        "\nRotten Tomatoes Rating: " +
+        movieResponse.data.Ratings[1].Value +
+        "\nCountry: " +
+        movieResponse.data.Country +
+        "\nLanguage: " +
+        movieResponse.data.Language +
+        "\nPlot: " +
+        movieResponse.data.Plot +
+        "\nActors: " +
+        movieResponse.data.Actors
+    );
+  });
+};
+
+//reads the command typed on random.txt
+var doWhatItSays = function() {
+  fs.readFile("random.txt", "utf8", function(err, data) {
+    if (err) {
+      return console.log(err);
     }
-}
+    console.log(data);
+    var dataArr = data.split(",");
+    console.log(dataArr);
+    switch (dataArr[0]) {
+      case "spotify-this-song":
+        spotifyThis(dataArr[1]);
+        break;
+      case "concert-this":
+        concertThis(dataArr[1]);
+        break;
+      case "movie-this":
+        movieThis(dataArr[1]);
+        break;
+      default:
+        console.log("something is wrong with the file");
+    }
+  });
+};
