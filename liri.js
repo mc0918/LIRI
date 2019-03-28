@@ -5,6 +5,8 @@ var axios = require("axios");
 var moment = require("moment");
 var inquirer = require("inquirer");
 var fs = require("fs");
+const chalk = require("chalk");
+var figlet = require("figlet");
 
 //Require keys file for API keys and save to variable
 var keys = require("./keys");
@@ -14,7 +16,12 @@ var spotify = new SpotifyAPI(keys.spotify);
 
 debugger;
 
-//console.log(spotify);
+var title = figlet.textSync("LIRI", {
+  font: "epic",
+  horizontalLayout: "default",
+  verticalLayout: "default"
+});
+console.log(chalk.bold.red(title));
 
 //inquirer prompt instead of using argv user input
 inquirer
