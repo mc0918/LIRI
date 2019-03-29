@@ -8,14 +8,14 @@ Command line node app that takes in parameters and gives back data.
 
 ## A question before you begin
 
--- Do you know how to use Github, Node, and Git Bash (or another command line interface)?
+- Do you know how to use Github, Node, and Git Bash (or another command line interface)?
 
-- If yes, continue onwards. If no, please familiarize yourself with them or you will be unable to run the program.
+  - If yes, continue onwards. If no, please familiarize yourself with them or you will be unable to run the program.
 
 ## Now
 
 1. Clone this repository from Github and navigate to the folder via command line
-   ![Command Line](...)
+   [Command Line](./images/intro.png)
 
 2. Run the liri.js file using Node.js
    ![liri](...)
